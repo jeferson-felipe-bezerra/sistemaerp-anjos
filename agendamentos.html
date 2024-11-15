@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Serviços</title>
+    <link rel="stylesheet" href="agendamentos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- jsPDF -->
+</head>
+<body>
+    <header>
+        <h1>Agendamento de Serviços</h1>
+        <button onclick="window.history.back()">Voltar</button>
+    </header>
+    <main>
+        <form id="agendamentoForm">
+            <h2>Informações do Cliente</h2>
+            <div class="form-section">
+                <label for="nome">Nome do Cliente:</label>
+                <input type="text" id="nome" required>
+
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" required>
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <h2>Informações do Serviço</h2>
+            <div class="form-section">
+                <label for="servico">Serviço:</label>
+                <select id="servico" required>
+                    <option value="">Selecione um serviço</option>
+                    <option value="limpeza">Limpeza de Ar-Condicionado</option>
+                    <option value="manutencao">Manutenção</option>
+                    <option value="reparo">Reparo</option>
+                    <option value="visita">Visita</option>
+                    <!-- Outras opções -->
+                </select>
+
+                <label for="prioridade">Prioridade do Serviço:</label>
+                <select id="prioridade" required>
+                    <option value="baixa">Baixa</option>
+                    <option value="media">Média</option>
+                    <option value="alta">Alta</option>
+                </select>
+
+                <label for="local">Local do Serviço:</label>
+                <input type="text" id="local" placeholder="Endereço completo" required>
+
+                <label for="descricao">Descrição do Serviço:</label>
+                <textarea id="descricao" rows="4" placeholder="Detalhes adicionais"></textarea>
+            </div>
+
+            <h2>Agendamento</h2>
+            <div class="form-section">
+                <label for="data">Data do Agendamento:</label>
+                <input type="date" id="data" required>
+
+                <label for="hora">Hora do Agendamento:</label>
+                <input type="time" id="hora" required>
+
+                <label for="duracao">Duração Estimada:</label>
+                <input type="text" id="duracao" placeholder="Ex: 1 hora">
+            </div>
+
+            <button type="submit" class="submit-btn">Confirmar Agendamento</button>
+        </form>
+
+        <h2>Agendamentos Futuros</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Lista de agendamentos -->
+            </tbody>
+        </table>
+        <script src="agendamentos.js"></script>
+    </main>
+    <footer>
+        <p>Contato: (xx) xxxx-xxxx | email@empresa.com</p>
+    </footer>
+</body>
+</html>

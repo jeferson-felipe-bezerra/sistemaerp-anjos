@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Ordens de Serviço</title>
+    <link rel="stylesheet" href="ordens_de_servico.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+        <button onclick="window.history.back()">Voltar</button>
+        <h1>Gerenciamento de Ordens de Serviço</h1>
+        </header>
+        
+        <form id="ordemServicoForm">
+            <div class="form-group">
+                <label for="dataOrdem">Data da Ordem:</label>
+                <input type="date" id="dataOrdem" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nomeCliente">Nome do Cliente:</label>
+                <input type="text" id="nomeCliente" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoServico">Tipo de Serviço:</label>
+                <input type="text" id="tipoServico" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descricaoServico">Descrição do Serviço:</label>
+                <textarea id="descricaoServico" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" required>
+                    <option value="pendente">Pendente</option>
+                    <option value="concluido">Concluído</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dataAgendamento">Data de Agendamento:</label>
+                <input type="date" id="dataAgendamento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="horaAgendamento">Hora de Agendamento:</label>
+                <input type="time" id="horaAgendamento" required>
+            </div>
+
+            <button type="submit" class="btn">Salvar Ordem de Serviço</button>
+        </form>
+
+        <table id="ordensTabela">
+            <thead>
+                <tr>
+                    <th>Número da Ordem</th>
+                    <th>Nome do Cliente</th>
+                    <th>Tipo de Serviço</th>
+                    <th>Status</th>
+                    <th>Data da Ordem</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script src="ordens_de_servico.js"></script>
+</body>
+</html>

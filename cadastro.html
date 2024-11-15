@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .user-form {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-form input {
+            width: 90%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .user-form button {
+            width: 80%;
+            padding: 10px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .user-list {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-form">
+        <h1>Cadastrar Usuário</h1>
+        <input type="text" id="username" placeholder="Usuário" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        <button onclick="addUser()">Cadastrar</button>
+        <button onclick="window.history.back()">Voltar</button>
+    </div>
+
+    <div class="user-list" id="userList">
+        <h2>Usuários Cadastrados</h2>
+        <ul id="userListUL"></ul>
+    </div>
+
+    <script>
+        let db;
+
+        // Abre a conexão com o IndexedDB
+        const request = indexedDB.open("sistemaDB", 1);
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            if (!db.objectStoreNames.contains("usuarios")) {
+                db.createObjectStore("usuarios", { keyPath: "username" });
+            }
+        };
+
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            loadUsers(); // Carrega os usuários ao abrir a página
+        };
+
+        request.onerror = function(event) {
+            alert("Erro ao abrir o banco de dados.");
+        };
+
+        // Função para adicionar um novo usuário
+        function addUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const transaction = db.transaction(["usuarios"], "readwrite");
+            const objectStore = transaction.objectStore("usuarios");
+            const request = objectStore.put({ username: username, password: password });
+
+            request.onsuccess = function() {
+                alert("Usuário cadastrado com sucesso!");
+                loadUsers(); // Atualiza a lista de usuários
+                document.getElementById('username').value = ''; // Limpa o campo
+                document.getElementById('password').value = ''; // Limpa o campo
+            };
+
+            request.onerror = function() {
+                alert("Erro ao cadastrar o usuário. O usuário pode já existir.");
+            };
+        }
+
+        // Função para carregar usuários
+        function loadUsers() {
+            const userList = document.getElementById('userListUL');
+            userList.innerHTML = ''; // Limpa a lista atual
+
+            const transaction = db.transaction(["usuarios"], "readonly");
+            const objectStore = transaction.objectStore("usuarios");
+            const request = objectStore.openCursor();
+
+            request.onsuccess = function(event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const li = document.createElement('li');
+                    li.textContent = `Usuário: ${cursor.value.username} `;
+                    const editButton = document.createElement('button');
+                    editButton.textContent = "Editar";
+                    editButton.onclick = () => editUser(cursor.value.username);
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = "Excluir";
+                    deleteButton.onclick = () => deleteUser(cursor.value.username);
+
+                    li.appendChild(editButton);
+                    li.appendChild(deleteButton);
+                    userList.appendChild(li);
+                    cursor.continue(); // Move para o próximo item
+                }
+            };
+        }
+
+        // Função para editar um usuário
+        function editUser(username) {
+            const newPassword = prompt("Digite a nova senha:");
+            if (newPassword) {
+                const transaction = db.transaction(["usuarios"], "readwrite");
+                const objectStore = transaction.objectStore("usuarios");
+                const request = objectStore.get(username);
+
+                request.onsuccess = function(event) {
+                    const user = event.target.result;
+                    if (user) {
+                        user.password = newPassword; // Atualiza a senha
+                        objectStore.put(user).onsuccess = function() {
+                            alert("Senha atualizada com sucesso!");
+                            loadUsers(); // Atualiza a lista de usuários
+                        };
+                    }
+                };
+            }
+        }
+
+        // Função para excluir um usuário
+        function deleteUser(username) {
+            const transaction = db.transaction(["usuarios"], "readwrite");
+            const objectStore = transaction.objectStore("usuarios");
+            const request = objectStore.delete(username);
+
+            request.onsuccess = function() {
+                alert("Usuário excluído com sucesso!");
+                loadUsers(); // Atualiza a lista de usuários
+            };
+
+            request.onerror = function() {
+                alert("Erro ao excluir o usuário.");
+            };
+        }
+    </script>
+</body>
+</html>

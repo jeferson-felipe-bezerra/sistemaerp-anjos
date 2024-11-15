@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PDV Completo</title>
+    <link rel="stylesheet" href="mercadorias.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>PDV</h2>
+        <a href="#" onclick="showSection('sales')">Vendas</a>
+        <a href="#" onclick="showSection('products')">Cadastro de Produtos</a>
+        <a href="#" onclick="showSection('reports')">Relatórios</a>
+        <a href="menu.html">Voltar</a>
+    </div>
+
+    <div class="container" id="sales">
+        <h1>Tela de Vendas</h1>
+        <!-- Novo: Dados do Cliente -->
+        <div class="customer-details">
+            <h3>Dados do Cliente</h3>
+            <input type="text" id="customer-name" placeholder="Nome do Cliente">
+            <input type="text" id="customer-cpf" placeholder="CPF do Cliente">
+            <input type="text" id="customer-phone" placeholder="Telefone do Cliente">
+        </div>
+
+        <!-- Novo: Métodos de Entrega 
+        <div class="delivery-method">
+            <h3>Método de Entrega</h3>
+            <label><input type="radio" name="delivery-method" value="retirar-loja"> Retirar na Loja</label>
+            <label><input type="radio" name="delivery-method" value="delivery"> Delivery</label>
+            <input type="text" id="delivery-address" placeholder="Endereço de Entrega" style="display:none;">
+        </div> -->
+
+        <!-- Carrinho de Compras -->
+        <div class="cart">
+            <h2>Carrinho de Compras</h2>
+            <div class="input-area">
+                <input type="text" id="search-product" placeholder="Buscar por nome ou código de barras" oninput="filterProducts()">
+                <div class="product-list" id="available-products"></div>
+            </div>
+            <div id="cart-items"></div>
+            <div class="total" id="total-amount">Total: R$ 0.00</div>
+            <div class="discount-area">
+                <input type="number" id="discount-input" placeholder="Desconto (%)">
+                <button id="apply-discount">Aplicar Desconto</button>
+            </div>
+            <div class="payment-methods">
+                <h3>Método de Pagamento</h3>
+                <label><input type="radio" name="payment-method" value="dinheiro"> Dinheiro</label>
+                <label><input type="radio" name="payment-method" value="cartao"> Cartão</label>
+                <label><input type="radio" name="payment-method" value="pix"> Pix</label>
+            </div>
+            <div class="installment-options">
+                <h3>Opções de Parcelamento</h3>
+                <label for="installments">Parcelar em:</label>
+                <select id="installments">
+                    <option value="1">À Vista</option>
+                    <option value="2">2x</option>
+                    <option value="3">3x</option>
+                    <option value="4">4x</option>
+                    <option value="5">5x</option>
+                </select>
+            </div>
+            <button id="finalize-sale">Finalizar Venda</button>
+            <div class="message" id="message"></div>
+            <div class="button-area">
+               <button id="emitir-nfe" onclick="emitirNotaFiscal()">Emitir Nota Fiscal</button>
+               <!--<button id="emitir-comprovante" onclick="emitirComprovante()">Emitir Comprovante de Compra</button>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="products">
+        <h1>Cadastro de Produtos</h1>
+        <div class="product-area">
+            <input type="text" id="product-name" placeholder="Nome do Produto">
+            <input type="text" id="product-description" placeholder="Descrição do Produto">
+            <input type="number" id="product-price" placeholder="Preço do Produto" step="0.01">
+            <input type="number" id="product-quantity" placeholder="Quantidade em Estoque" min="0">
+            <button id="add-product">Adicionar Produto</button>
+            <div class="message" id="product-message"></div>
+        </div>
+
+        <h2>Produtos Cadastrados</h2>
+        <table id="registered-products-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody id="registered-products">
+                <!-- Produtos cadastrados serão exibidos aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container" id="reports">
+      <!--  <h1>Relatórios</h1>
+        <p>Aqui você poderá gerar relatórios de vendas e estoque.</p>
+        <div class="filter-area">
+            <label for="start-date">Data de Início:</label>
+            <input type="date" id="start-date">
+            <label for="end-date">Data de Fim:</label>
+            <input type="date" id="end-date">
+            <input type="text" id="product-name-filter" placeholder="Filtrar por nome do produto" oninput="filterSalesByProductName()">
+            <button onclick="filterSalesByDate()">Filtrar Vendas</button>
+            <button onclick="finalizeReport()">Finalizar Relatório</button>
+        </div>-->
+
+        <div class="message" id="report-message"></div>
+        <h2>Últimas Vendas</h2>
+        <button id="toggle-sales-button">Mostrar Últimas Vendas</button>
+        <div class="sales-list" id="sales-list-report" style="display: none;">
+            <!-- Vendas serão adicionadas aqui -->
+        </div>
+        
+        <!-- Novo: Visualizar DANFEs
+        <div class="danfe-viewer">
+            <h2>Ver DANFE por ID de Venda</h2>
+            <input type="text" id="sale-id-input" placeholder="Digite o ID da Venda">
+            <button onclick="viewDanfe()">Ver DANFE</button>
+            <div id="danfe-output"></div>
+        </div>-->
+        
+        <div class="overlay" id="overlay" style="display: none;"></div>
+        <div class="popup" id="product-popup" style="display: none;">
+            <h3>Buscar Produtos</h3>
+            <input type="text" id="popup-search-input" placeholder="Digite o nome do produto">
+            <button onclick="searchProduct()">Buscar</button>
+            <button onclick="closePopup()">Fechar</button>
+        </div>
+    </div>
+
+    <script src="mercadorias.js"></script>
+</body>
+</html>

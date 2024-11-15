@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Contas</title>
+    <link rel="stylesheet" href="boletos.css">
+</head>
+<body>
+    <header>
+        <h1>Gerenciamento de Contas</h1>
+        <button onclick="window.history.back()">Voltar</button>
+        <button onclick="abrirFormulario()">Adicionar Conta</button>
+    </header>
+    <main>
+        <form id="contaForm" style="display:none;">
+            <h2>Adicionar/Editar Conta</h2>
+
+            <div class="form-section">
+                <h3>Informações da Conta</h3>
+                <label for="tipo">Tipo de Conta:</label>
+                <select id="tipo" required>
+                    <option value="">Selecione um tipo</option>
+                    <option value="agua">Água</option>
+                    <option value="luz">Luz</option>
+                    <option value="internet">Internet</option>
+                    <option value="aluguel">Aluguel</option>
+                    <option value="outros">outros</option>
+                </select>
+
+                <label for="fornecedor">Fornecedor/Emitente:</label>
+                <input type="text" id="fornecedor" placeholder="Nome do fornecedor" required>
+
+                <label for="numeroFatura">Número da Fatura:</label>
+                <input type="text" id="numeroFatura" placeholder="Número da fatura">
+
+                <label for="valor">Valor:</label>
+                <input type="number" id="valor" required>
+            </div>
+
+            <div class="form-section">
+                <h3>Datas</h3>
+                <label for="dataEmissao">Data de Emissão:</label>
+                <input type="date" id="dataEmissao" required>
+
+                <label for="dataVencimento">Data de Vencimento:</label>
+                <input type="date" id="dataVencimento" required>
+
+                <label for="dataPagamento">Data de Pagamento:</label>
+                <input type="date" id="dataPagamento">
+            </div>
+
+            <div class="form-section">
+                <h3>Status e Pagamento</h3>
+                <label for="status">Status:</label>
+                <select id="status" required>
+                    <option value="paga">Paga</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="atrasada">Atrasada</option>
+                </select>
+
+                <label for="formaPagamento">Forma de Pagamento:</label>
+                <select id="formaPagamento" required>
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="cartao_credito">Cartão de Crédito</option>
+                    <option value="debito">Débito</option>
+                    <option value="transferencia">Transferência Bancária</option>
+                </select>
+
+                <label for="recorrente">É Recorrente?</label>
+                <input type="checkbox" id="recorrente">
+            </div>
+
+            <div class="form-section">
+                <h3>Descrição</h3>
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" rows="4" placeholder="Informações adicionais"></textarea>
+
+                <label for="categoria">Categoria de Despesa:</label>
+                <select id="categoria" required>
+                    <option value="fixas">Despesas Fixas</option>
+                    <option value="variaveis">Despesas Variáveis</option>
+                    <option value="emergenciais">Despesas Emergenciais</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>Anexos</h3>
+                <label for="anexo">Anexar Comprovante:</label>
+                <input type="file" id="anexo" accept=".pdf,.jpg,.png,.jpeg">
+            </div>
+
+            <button type="submit">Salvar</button>
+
+            <button type="button" onclick="fecharFormulario()">Cancelar</button>
+        </form>
+
+        <h2>Lista de Contas</h2>
+        <input type="text" id="filtro" placeholder="Buscar contas...">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de Conta</th>
+                    <th>Fornecedor</th>
+                    <th>Valor</th>
+                    <th>Data de Emissão</th>
+                    <th>Data de Vencimento</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Lista de contas -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>Contato: (xx) xxxx-xxxx | email@empresa.com</p>
+    </footer>
+
+    <script>
+        function abrirFormulario() {
+            document.getElementById('contaForm').style.display = 'block';
+        }
+
+        function fecharFormulario() {
+            document.getElementById('contaForm').style.display = 'none';
+        }
+        
+    </script>
+    <script src="boletos.js"></script>
+
+</body>
+</html>
